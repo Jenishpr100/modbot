@@ -42,6 +42,8 @@
 - **`/prefix [prefix]`**  
   Sets a custom server prefix for the bot
 
+- **`/purge [amount]`**  
+  Deletes `amount` number of messages in the channel it was used on
 ---
 
 ## 👤 User & Server Info
