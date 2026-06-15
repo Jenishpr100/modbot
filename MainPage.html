@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ModBot Control Panel</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter, sans-serif;
+}
+
+body{
+overflow-x:hidden;
+color:white;
+background:#0a0a0f;
+}
+
+/* Animated background */
+.bg{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+background:linear-gradient(-45deg,#0f0c29,#302b63,#24243e,#000000);
+background-size:400% 400%;
+animation:gradient 10s ease infinite;
+z-index:-2;
+}
+
+@keyframes gradient{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* particles */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* nav */
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+backdrop-filter:blur(10px);
+background:rgba(255,255,255,0.05);
+border-bottom:1px solid rgba(255,255,255,0.1);
+position:sticky;
+top:0;
+z-index:10;
+}
+
+nav h1{
+font-weight:800;
+letter-spacing:1px;
+}
+
+.nav-links button{
+background:none;
+border:none;
+color:white;
+margin:0 10px;
+cursor:pointer;
+font-weight:500;
+opacity:0.7;
+transition:0.3s;
+}
+
+.nav-links button:hover{
+opacity:1;
+transform:scale(1.05);
+}
+
+/* sections */
+section{
+display:none;
+padding:80px 20px;
+max-width:1000px;
+margin:auto;
+animation:fade 0.5s ease;
+}
+
+section.active{
+display:block;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* hero */
+.hero{
+text-align:center;
+padding-top:120px;
+}
+
+.hero h2{
+font-size:50px;
+font-weight:800;
+}
+
+.hero p{
+opacity:0.7;
+margin-top:10px;
+}
+
+/* buttons */
+.btn{
+padding:10px 18px;
+border-radius:10px;
+border:none;
+cursor:pointer;
+margin:10px;
+background:rgba(255,255,255,0.1);
+color:white;
+transition:0.3s;
+backdrop-filter:blur(10px);
+}
+
+.btn:hover{
+transform:scale(1.05);
+background:rgba(255,255,255,0.2);
+}
+
+/* cards */
+.card{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:15px;
+margin:15px 0;
+border:1px solid rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+}
+
+/* floating info button */
+.info{
+position:fixed;
+bottom:20px;
+right:20px;
+width:50px;
+height:50px;
+border-radius:50%;
+background:white;
+color:black;
+display:flex;
+justify-content:center;
+align-items:center;
+font-weight:800;
+cursor:pointer;
+z-index:100;
+}
+
+/* modal */
+.modal{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#111;
+padding:20px;
+border-radius:15px;
+display:none;
+z-index:1000;
+width:300px;
+}
+
+.modal.active{
+display:block;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<canvas id="particles"></canvas>
+
+<nav>
+<h1>ModBot</h1>
+<div class="nav-links">
+<button onclick="show('home')">Home</button>
+<button onclick="show('commands')">Commands</button>
+<button onclick="show('guide')">Guide</button>
+<button onclick="show('about')">About</button>
+</div>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="active hero">
+<h2>ModBot</h2>
+<p>Next-gen Discord moderation system</p>
+
+<br/>
+
+<a class="btn" href="https://discord.com/oauth2/authorize?client_id=1516150570388553748&permissions=8&integration_type=0&scope=bot" target="_blank">Invite Bot</a>
+<a class="btn" href="https://github.com/Jenishpr100/modbot" target="_blank">GitHub</a>
+<a class="btn" href="https://discord.gg/jqGPHtw7jD" target="_blank">Support Server</a>
+</section>
+
+<!-- COMMANDS -->
+<section id="commands">
+<h2>Commands</h2>
+
+<div class="card">
+<p>Full command list is hosted externally:</p>
+<br/>
+<a class="btn" href="https://jenishpr100.github.io/modbot/commandlist" target="_blank">Open Command List</a>
+</div>
+</section>
+
+<!-- GUIDE -->
+<section id="guide">
+<h2>Setup Guide</h2>
+
+<div class="card">
+<p>1. Invite the bot using the button on home page</p>
+<p>2. Give it Administrator permission (recommended)</p>
+<p>3. Run <b>/modlog</b> to set log channel</p>
+<p>4. Configure prefix using <b>/prefix</b></p>
+</div>
+
+<div class="card">
+<p>Bot uses Discord timeout system for mutes and logs everything automatically.</p>
+</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+<h2>About</h2>
+
+<div class="card">
+<p><b>Developer:</b> Lyrics_loop</p>
+<p>ModBot is a lightweight moderation system built for safety, logging, and server control.</p>
+</div>
+</section>
+
+<!-- INFO BUTTON -->
+<div class="info" onclick="toggleModal()">i</div>
+
+<div class="modal" id="modal">
+<h3>Quick Info</h3>
+<p>- Click navigation to switch pages</p>
+<p>- Commands are external</p>
+<p>- Bot is fully Discord timeout based</p>
+<br/>
+<button class="btn" onclick="toggleModal()">Close</button>
+</div>
+
+<script>
+// navigation
+function show(id){
+document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+// modal
+function toggleModal(){
+document.getElementById("modal").classList.toggle("active");
+}
+
+// particles
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+for(let i=0;i<80;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+dx:(Math.random()-0.5),
+dy:(Math.random()-0.5)
+});
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+particles.forEach(p=>{
+p.x+=p.dx;
+p.y+=p.dy;
+
+if(p.x<0||p.x>canvas.width)p.dx*=-1;
+if(p.y<0||p.y>canvas.height)p.dy*=-1;
+
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fillStyle="white";
+ctx.fill();
+});
+
+requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
