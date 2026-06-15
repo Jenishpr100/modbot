@@ -1,58 +1,75 @@
-# ModBot Commands
+# 🛡️ ModBot Commands
 
-## Moderation Commands
+## 🔨 Moderation Commands
 
-| Command | Description |
-|----------|-------------|
-| `/mute [user] [time] [reason]` | Temporarily mutes a user using Discord timeout system |
-| `/unmute [user]` | Removes an active mute/timeout from a user |
-| `/warn [user] [reason]` | Issues a warning and logs it to `warns.json` |
-| `/warning [user]` | Displays all warnings for a user |
-| `/ban [user] [reason]` | Permanently bans a user from the server |
-| `/unban [user]` | Unbans a previously banned user |
-| `/kick [user] [reason]` | Removes a user from the server without banning |
+- **`/mute [user] [time] [reason]`**  
+  Temporarily mutes a user using Discord timeout system
 
----
+- **`/unmute [user]`**  
+  Removes an active mute/timeout from a user
 
-## Channel Management
+- **`/warn [user] [reason]`**  
+  Issues a warning and logs it to `warns.json`
 
-| Command | Description |
-|----------|-------------|
-| `/lock` | Locks the current channel (prevents sending messages) |
-| `/unlock` | Unlocks the current channel |
-| `/slowmode [seconds]` | Sets slowmode delay in the current channel |
-| `/modlog [channel]` | Sets the moderation log channel for the server |
-| `/prefix [prefix]` | Sets a custom prefix for the server |
+- **`/warning [user]`**  
+  Displays all warnings for a user
 
----
+- **`/ban [user] [reason]`**  
+  Permanently bans a user from the server
 
-## User & Server Info
+- **`/unban [user]`**  
+  Unbans a previously banned user
 
-| Command | Description |
-|----------|-------------|
-| `/userinfo [user]` | Shows detailed information about a user |
-| `/serverinfo` | Displays information about the current server |
+- **`/kick [user] [reason]`**  
+  Removes a user from the server without banning them
 
 ---
 
-## Logging System (Internal Data Files)
+## ⚙️ Channel Management
 
-| File | Purpose |
-|----------|-------------|
-| `warns.json` | Stores all warnings (userId, moderatorId, reason, timestamps) |
-| `mutes.json` | Stores mute records (active + historical moderation logs) |
-| `prefix.json` | Maps guild IDs to custom bot prefixes |
-| `modlog.json` | Stores modlog channel configuration per server |
-| `modstats.json` | Tracks moderator actions (per guild + per moderator) |
-| `notes.json` | Private moderator notes per user (guild-based storage) |
-| `commandLogs.json` | Logs every command usage (user, ID, command, timestamp) |
+- **`/lock`**  
+  Locks the current channel (prevents sending messages)
+
+- **`/unlock`**  
+  Unlocks the current channel
+
+- **`/slowmode [seconds]`**  
+  Sets slowmode delay in the current channel
+
+- **`/modlog [channel]`**  
+  Sets the moderation log channel for the server
+
+- **`/prefix [prefix]`**  
+  Sets a custom server prefix for the bot
 
 ---
 
-## Bot Behavior Notes
+## 👤 User & Server Info
 
-- Discord timeout system is used for mute enforcement
-- All moderation actions are logged automatically
-- Warnings are stored but not enforced automatically
-- Mod logs require channel setup using `/modlog`
-- Prefix system is guild-based
+- **`/userinfo [user]`**  
+  Shows detailed information about a user
+
+- **`/serverinfo`**  
+  Displays information about the current server
+
+---
+
+## 🧾 Logging System (Internal Data Files)
+
+- `warns.json` → Stores all warnings (userId, moderatorId, reason, timestamps)
+- `mutes.json` → Stores mute records (active + historical moderation logs)
+- `prefix.json` → Maps guild IDs to custom bot prefixes
+- `modlog.json` → Stores modlog channel configuration per server
+- `modstats.json` → Tracks moderator action counts per guild and moderator
+- `notes.json` → Private moderator notes per user (guild-based storage)
+- `commandLogs.json` → Logs every command usage (user, ID, command, timestamp)
+
+---
+
+## 🤖 Bot Behavior Notes
+
+- Uses Discord timeout system for mute enforcement
+- All moderation actions are automatically logged
+- Warnings are stored but not auto-enforced
+- Mod logs require `/modlog` setup per server
+- Prefix system is stored per guild
