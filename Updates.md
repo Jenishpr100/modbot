@@ -11,3 +11,6 @@
   - `/about` -  Displays the [`about`](https://jenishpr100.github.io/modbot/About).
   - `/help` - Displays the [`Command Lists`](https://jenishpr100.github.io/modbot/commandlist).
   - `/update` - Displays the current version of the bot.
+
+# v1.0.2
+- Added a better logging feaures and a display
