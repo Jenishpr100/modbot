@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>command log</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:        #0b0d12;
+    --surface:   #12151c;
+    --surface-2: #181c25;
+    --border:    #242936;
+    --text:      #dde1e8;
+    --muted:     #6f7787;
+    --accent:    #5865f2;
+    --accent-2:  #3ba55d;
+    --link:      #58a6ff;
+    --danger:    #ed4245;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+    background-size: 28px 28px;
+  }
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+
+  /* ── Header ──────────────────────────────────────────── */
+
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:24px;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+  }
+
+  .title-block{ display:flex; flex-direction:column; gap:6px; }
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    color:var(--accent);
+    text-transform:uppercase;
+  }
+
+  h1{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:30px;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  h1 .cursor{
+    display:inline-block;
+    width:.5em;
+    background:var(--accent);
+    color:var(--accent);
+    margin-left:4px;
+    animation:blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .stats{
+    display:flex;
+    gap:18px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .stat{ text-align:right; }
+  .stat .n{ font-size:22px; font-weight:600; color:var(--text); display:block; }
+  .stat .l{ font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+
+  /* ── Controls ────────────────────────────────────────── */
+
+  .controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+
+  .search{
+    flex:1 1 240px;
+    position:relative;
+  }
+  .search input{
+    width:100%;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--text);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    padding:10px 12px 10px 30px;
+    outline:none;
+    transition:border-color .15s ease;
+  }
+  .search input:focus{ border-color:var(--accent); }
+  .search input::placeholder{ color:var(--muted); }
+  .search::before{
+    content:'$';
+    position:absolute;
+    left:11px; top:9px;
+    color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+  }
+
+  .filter-group{ display:flex; gap:6px; }
+  .chip{
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    padding:9px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.15s ease;
+    white-space:nowrap;
+  }
+  .chip:hover{ border-color:#3a4150; color:var(--text); }
+  .chip.active{
+    background:rgba(88,101,242,0.15);
+    border-color:var(--accent);
+    color:var(--text);
+  }
+
+  /* ── Log list ────────────────────────────────────────── */
+
+  .log{
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    background:var(--surface);
+  }
+
+  .log-head{
+    display:grid;
+    grid-template-columns: 150px 90px 1fr 160px 160px 70px;
+    gap:12px;
+    padding:10px 16px;
+    background:var(--surface-2);
+    border-bottom:1px solid var(--border);
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  .row{
+    display:grid;
+    grid-template-columns: 150px 90px 1fr 160px 160px 70px;
+    gap:12px;
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    align-items:center;
+    transition:background .12s ease;
+  }
+  .row:last-child{ border-bottom:none; }
+  .row:hover{ background:var(--surface-2); }
+
+  .cell-time{ color:var(--muted); }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:3px 8px;
+    border-radius:5px;
+    font-size:11px;
+    font-weight:600;
+    width:fit-content;
+  }
+  .badge.slash{ background:rgba(88,101,242,.15); color:#8a93f5; }
+  .badge.prefix{ background:rgba(59,165,93,.15); color:#5fd585; }
+
+  .cell-command{ color:var(--text); font-weight:600; }
+  .cell-command::before{ content:'> '; color:var(--muted); font-weight:400; }
+
+  .cell-user{ color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .cell-user .uid{ display:block; color:var(--muted); font-size:10.5px; }
+
+  .cell-guild{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text); }
+  .cell-guild .cid{ display:block; color:var(--muted); font-size:10.5px; }
+
+  .cell-link a{
+    color:var(--link);
+    text-decoration:none;
+    border-bottom:1px dotted rgba(88,166,255,.4);
+  }
+  .cell-link a:hover{ border-bottom-style:solid; }
+  .cell-link .none{ color:var(--muted); }
+
+  /* ── Empty state ─────────────────────────────────────── */
+
+  .empty{
+    padding:60px 20px;
+    text-align:center;
+    color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+  }
+  .empty .big{ font-size:28px; display:block; margin-bottom:10px; }
+
+  footer{
+    margin-top:20px;
+    text-align:center;
+    color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+  }
+
+  @media (max-width: 760px){
+    .log-head{ display:none; }
+    .row{
+      grid-template-columns: 1fr;
+      gap:6px;
+      padding:14px 16px;
+    }
+    .cell-time{ order:-1; font-size:11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="title-block">
+      <span class="eyebrow">discord bot · activity</span>
+      <h1>command log<span class="cursor">&nbsp;</span></h1>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="n" id="statTotal">0</span><span class="l">total</span></div>
+      <div class="stat"><span class="n" id="statSlash">0</span><span class="l">slash</span></div>
+      <div class="stat"><span class="n" id="statPrefix">0</span><span class="l">prefix</span></div>
+      <div class="stat"><span class="n" id="statServers">0</span><span class="l">servers</span></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="search">
+      <input id="searchInput" type="text" placeholder="search command, user, or server...">
+    </div>
+    <div class="filter-group" id="typeFilter">
+      <div class="chip active" data-type="all">all</div>
+      <div class="chip" data-type="slash">/ slash</div>
+      <div class="chip" data-type="prefix">!! prefix</div>
+    </div>
+  </div>
+
+  <div class="log">
+    <div class="log-head">
+      <div>time</div>
+      <div>type</div>
+      <div>command</div>
+      <div>user</div>
+      <div>server</div>
+      <div>link</div>
+    </div>
+    <div id="rows"></div>
+    <div class="empty" id="emptyState" style="display:none;">
+      <span class="big">∅</span>
+      no commands logged yet — run one in your server, then refresh this page.
+    </div>
+  </div>
+
+  <footer>reading logs/useslog.js · sorted newest first</footer>
+
+</div>
+
+<script src="useslog.js"></script>
+<script>
+(function(){
+  const data = (typeof window.commandLogs !== 'undefined') ? window.commandLogs.slice() : [];
+
+  data.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+  const rowsEl   = document.getElementById('rows');
+  const emptyEl  = document.getElementById('emptyState');
+  const searchEl = document.getElementById('searchInput');
+  const chips    = document.querySelectorAll('.chip');
+
+  let activeType = 'all';
+
+  function fmtTime(iso){
+    const d = new Date(iso);
+    if (isNaN(d)) return iso || '—';
+    return d.toLocaleString(undefined, {
+      month:'short', day:'2-digit',
+      hour:'2-digit', minute:'2-digit', second:'2-digit'
+    });
+  }
+
+  function escapeHtml(str){
+    return String(str ?? '').replace(/[&<>"']/g, c => ({
+      '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+    }[c]));
+  }
+
+  function render(){
+    const q = searchEl.value.trim().toLowerCase();
+
+    const filtered = data.filter(e => {
+      if (activeType !== 'all' && e.type !== activeType) return false;
+      if (!q) return true;
+      const haystack = [e.command, e.username, e.guildName, e.channelName]
+        .join(' ').toLowerCase();
+      return haystack.includes(q);
+    });
+
+    if (filtered.length === 0){
+      rowsEl.innerHTML = '';
+      emptyEl.style.display = 'block';
+      emptyEl.querySelector('.big').nextSibling ? null : null;
+      emptyEl.lastChild.textContent = data.length === 0
+        ? ' no commands logged yet — run one in your server, then refresh this page.'
+        : ' no entries match your search.';
+      return;
+    }
+    emptyEl.style.display = 'none';
+
+    rowsEl.innerHTML = filtered.map(e => {
+      const badgeClass = e.type === 'slash' ? 'slash' : 'prefix';
+      const badgeLabel  = e.type === 'slash' ? '/ slash' : '!! prefix';
+      const link = e.messageLink
+        ? `<a href="${escapeHtml(e.messageLink)}" target="_blank" rel="noopener">open ↗</a>`
+        : `<span class="none">—</span>`;
+
+      return `
+        <div class="row">
+          <div class="cell-time">${fmtTime(e.time)}</div>
+          <div><span class="badge ${badgeClass}">${badgeLabel}</span></div>
+          <div class="cell-command">${escapeHtml(e.command)}</div>
+          <div class="cell-user">${escapeHtml(e.username)}<span class="uid">${escapeHtml(e.userId)}</span></div>
+          <div class="cell-guild">${escapeHtml(e.guildName)}<span class="cid">${escapeHtml(e.channelName ?? '')}</span></div>
+          <div class="cell-link">${link}</div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderStats(){
+    const total  = data.length;
+    const slash  = data.filter(e => e.type === 'slash').length;
+    const prefix = data.filter(e => e.type === 'prefix').length;
+    const servers = new Set(data.map(e => e.guildId).filter(Boolean)).size;
+
+    document.getElementById('statTotal').textContent   = total;
+    document.getElementById('statSlash').textContent    = slash;
+    document.getElementById('statPrefix').textContent   = prefix;
+    document.getElementById('statServers').textContent  = servers;
+  }
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeType = chip.dataset.type;
+      render();
+    });
+  });
+
+  searchEl.addEventListener('input', render);
+
+  renderStats();
+  render();
+})();
+</script>
+
+</body>
+</html>
