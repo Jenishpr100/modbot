@@ -1,5 +1,5 @@
 # 🛡️ ModBot — Discord Moderation Bot
-# v1.0.2
+# v1.0.1
 
 A fully-featured Discord moderation bot built with **discord.js v14**. Supports both slash commands (`/`) and prefix message commands (`!!` by default, configurable per server). Every moderation action is logged to a dedicated channel and tracked in per-moderator statistics.
 
