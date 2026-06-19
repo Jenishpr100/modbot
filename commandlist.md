@@ -46,7 +46,7 @@
   Deletes `amount` number of messages in the channel it was used on
 ---
 
-## 👤 User & Server Info
+## 👤 User, Server & Bot Info
 
 - `/userinfo [user]` - Shows detailed information about a user
 - `/serverinfo` - Displays information about the current server
