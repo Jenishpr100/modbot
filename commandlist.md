@@ -48,12 +48,11 @@
 
 ## 👤 User & Server Info
 
-- **`/userinfo [user]`**  
-  Shows detailed information about a user
-
-- **`/serverinfo`**  
-  Displays information about the current server
-
+- `/userinfo [user]` - Shows detailed information about a user
+- `/serverinfo` - Displays information about the current server
+- `/about` -  Displays the [`about`](https://jenishpr100.github.io/modbot/About).
+- `/help` - Displays the [`Command Lists`](https://jenishpr100.github.io/modbot/commandlist).
+- `/update` - Displays the current version of the bot.
 ---
 
 ## 🧾 Logging System (Internal Data Files)
